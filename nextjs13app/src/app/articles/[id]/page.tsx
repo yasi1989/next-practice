@@ -4,7 +4,10 @@ import Image from "next/image";
 const Article = async ({ params }: { params: { id: string } }) => {
   // params自体は非同期で解決されるべきであるため、paramsのプロパティにアクセスする前に、paramsを待機する必要がある。
   const { id } = await params;
-  const detailArticle = await getDetailArticle(id);
+  // const detailArticle = await getDetailArticle(id);
+  const API_URL = process.env.NEXT_PUBLIC_API_URL!;
+  const res = await fetch(`${API_URL}/api/${id}`, { next: { revalidate: 60 } });
+  const detailArticle = await res.json();
 
   return (
     <div className="max-w-3xl mx-auto p-5">
