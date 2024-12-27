@@ -3,26 +3,35 @@
 // components/PostForm.tsx
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { SendIcon } from "./Icons";
-import { useRef, useState } from "react";
+import SubmitButton from "./SubmitButton";
 import { addPostAction } from "@/lib/actions";
+import { useRef } from "react";
+import { useFormState } from "react-dom";
 
 export default function PostForm() {
-  const [error, setError] = useState<string | undefined>("");
+  const initialState = {
+    error: undefined,
+    success: false,
+  };
+  const [state, formAction] = useFormState(addPostAction, initialState);
+  // const [error, setError] = useState<string | undefined>(undefined);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const handleSubmit = async (formData: FormData) => {
-    const result = await addPostAction(formData);
-    if (!result?.success) {
-      setError(result?.error);
-    } else {
-      setError("");
-      if (formRef.current) {
-        formRef.current.reset();
-      }
-    }
-  };
+  // const handleSubmit = async (formData: FormData) => {
+  //   const result = await addPostAction(formData);
+  //   if (!result?.success) {
+  //     setError(result?.error);
+  //   } else {
+  //     setError("");
+  //     if (formRef.current) {
+  //       formRef.current.reset();
+  //     }
+  //   }
+  // };
+
+  if (state.success && formRef.current) {
+    formRef.current.reset();
+  }
 
   return (
     <div>
@@ -33,7 +42,7 @@ export default function PostForm() {
         </Avatar>
         <form
           ref={formRef}
-          action={handleSubmit}
+          action={formAction}
           className="flex items-center flex-1"
         >
           <Input
@@ -42,13 +51,12 @@ export default function PostForm() {
             className="flex-1 rounded-full bg-muted px-4 py-2"
             name="post"
           />
-          <Button variant="ghost" size="icon">
-            <SendIcon className="h-5 w-5 text-muted-foreground" />
-            <span className="sr-only">Tweet</span>
-          </Button>
+          <SubmitButton />
         </form>
       </div>
-      {error && <p className="text-destructive mt-1 ml-14">{error}</p>}
+      {state.error && (
+        <p className="text-destructive mt-1 ml-14">{state.error}</p>
+      )}
     </div>
   );
 }

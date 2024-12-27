@@ -1,13 +1,25 @@
 "use server";
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-export async function addPostAction(formData: FormData) {
+type State = {
+  error?: string | undefined;
+  success: boolean;
+};
+
+export async function addPostAction(
+  prevState: State,
+  formData: FormData
+): Promise<State> {
   try {
     const { userId } = auth();
     if (!userId) {
-      return;
+      return {
+        error: "ユーザが存在しません",
+        success: false,
+      };
     }
     const postText = formData.get("post") as string;
     const postTextSchema = z
@@ -21,6 +33,9 @@ export async function addPostAction(formData: FormData) {
         authorId: userId,
       },
     });
+
+    revalidatePath("/");
+
     return {
       error: undefined,
       success: true,
