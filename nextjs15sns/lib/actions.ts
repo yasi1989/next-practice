@@ -59,3 +59,76 @@ export async function addPostAction(
     }
   }
 }
+
+export async function likeAction(postId: string) {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User is not authonicated");
+  }
+
+  try {
+    const existingLike = await prisma.like.findFirst({
+      where: {
+        postId: postId,
+        userId: userId,
+      },
+    });
+
+    if (existingLike) {
+      await prisma.like.delete({
+        where: {
+          id: existingLike.id,
+        },
+      });
+    } else {
+      await prisma.like.create({
+        data: {
+          postId,
+          userId,
+        },
+      });
+    }
+    revalidatePath("/");
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function followAction(userId: string) {
+  const { userId: currentUserId } = auth();
+
+  if (!currentUserId) {
+    throw new Error("User is not authonicated");
+  }
+
+  try {
+    const existingFollow = await prisma.follow.findFirst({
+      where: {
+        followerId: currentUserId,
+        followingId: userId,
+      },
+    });
+
+    if (existingFollow) {
+      await prisma.follow.delete({
+        where: {
+          followerId_followingId: {
+            followerId: currentUserId,
+            followingId: userId,
+          },
+        },
+      });
+    } else {
+      await prisma.follow.create({
+        data: {
+          followerId: currentUserId,
+          followingId: userId,
+        },
+      });
+    }
+    revalidatePath(`profile/${userId}`);
+  } catch (error) {
+    console.error(error);
+  }
+}
