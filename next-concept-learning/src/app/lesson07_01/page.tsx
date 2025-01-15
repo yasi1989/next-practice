@@ -2,6 +2,12 @@ import React from 'react'
 import { getPosts } from './_lib/fetcher'
 import PostItem from './_components/PostItem';
 
+export type Product = {
+  id: string;
+  title: string;
+  description: string;
+}
+
 const Page = async () => {
     const {posts} = await getPosts();
   return (

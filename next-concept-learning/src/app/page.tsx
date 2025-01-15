@@ -18,6 +18,18 @@ export default function Home() {
       <Link href={"/lesson07_02"} className="border-2 rounded-md py-4 items-center justify-center flex hover:bg-slate-200">
         Lesson07_02
       </Link>
+      <Link href={"/lesson09"} className="border-2 rounded-md py-4 items-center justify-center flex hover:bg-slate-200">
+        Lesson09
+      </Link>
+      <Link href={"/lesson12"} className="border-2 rounded-md py-4 items-center justify-center flex hover:bg-slate-200">
+        Lesson12
+      </Link>
+      <Link href={"/lesson13"} className="border-2 rounded-md py-4 items-center justify-center flex hover:bg-slate-200">
+        Lesson13
+      </Link>
+      <Link href={"/lesson14"} className="border-2 rounded-md py-4 items-center justify-center flex hover:bg-slate-200">
+        Lesson14
+      </Link>
     </main>
   );
 }
