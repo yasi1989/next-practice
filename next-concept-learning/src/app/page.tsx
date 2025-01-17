@@ -33,6 +33,12 @@ export default function Home() {
       <Link href={"/lesson19"} className="border-2 rounded-md py-4 items-center justify-center flex hover:bg-slate-200">
         Lesson19
       </Link>
+      <Link href={"/lesson22"} className="border-2 rounded-md py-4 items-center justify-center flex hover:bg-slate-200">
+        Lesson22
+      </Link>
+      <Link href={"/lesson23"} className="border-2 rounded-md py-4 items-center justify-center flex hover:bg-slate-200">
+        Lesson23
+      </Link>
     </main>
   );
 }
